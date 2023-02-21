@@ -38,10 +38,9 @@ function App() {
       <div className="container">
         <form onSubmit={finalSearch}>
           <input className='search' placeholder='Search...' onChange={myRecipeSearch} value={mySearch}></input>
+          <button><img src={icon} alt='icon' width='30px' /></button>
         </form>
-      <div className="container">
-        <button><img src={icon} alt='icon' width='30px' /></button>
-      </div>  
+ 
       </div>   
       {myRecipe.map(el => (
             <MyRecipeComponent 
