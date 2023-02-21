@@ -1,26 +1,55 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import video from './food.mp4';
+import icon from './icons-eggs.png';
+import MyRecipeComponent from './MyRecipeComponent';
 function App() {
-  const [quote, setQuote] = useState("");
-  /*const getQuote = useCallback( async() => {
-    const responce = await fetch ('https://api.quotable.io/random');
-    const data = await responce.json();
-    setQuote(data.content);
+  const API_ID = 'a13a93c2';
+  const API_KEY = 'ca71c1410357f36df2007a697407abec';
+
+  const [mySearch, setMySearch] = useState('');
+  const [myRecipe, setMyRecipe] = useState([]);
+  const [wordSubmitted, setWordSubmitted] = useState ('cheese');
+
+  const getRecipe = useCallback (async ()=> {
+      const responce = await fetch (`https://api.edamam.com/api/recipes/v2?type=public&q=${wordSubmitted}&app_id=${API_ID}&app_key=${API_KEY}`);
+      const data = await responce.json();
+      setMyRecipe (data.hits);
   })
   useEffect (()=> {
-    getQuote() 
-  }, [getQuote])*/
-  useEffect (() =>{
-    const getQuote = async () => {
-      const responce = await fetch ('https://api.quotable.io/random')
-      const data = await responce.json()
-      console.log(data);
-      setQuote(data)
+      getRecipe();
+    }, [wordSubmitted]);
+    const myRecipeSearch = (e) => {
+      setMySearch (e.target.value);
     }
-  })
+
+  const finalSearch = (e) => {
+    e.preventDefault();
+    setWordSubmitted (mySearch);
+  }  
   return (
     <div className="App">
-      <p>{quote}</p>
+      <div className="container">
+        <video autoPlay muted loop>
+          <source src={video} type="video/mp4" />
+        </video>
+        <h1>Find a Recipe</h1>
+      </div>
+      <div className="container">
+        <form onSubmit={finalSearch}>
+          <input className='search' placeholder='Search...' onChange={myRecipeSearch} value={mySearch}></input>
+        </form>
+      <div className="container">
+        <button><img src={icon} alt='icon' width='30px' /></button>
+      </div>  
+      </div>   
+      {myRecipe.map(el => (
+            <MyRecipeComponent 
+            label={el.recipe.label} 
+            image={el.recipe.image} 
+            calories={el.recipe.calories} 
+            ingredients={el.recipe.ingredientLines}/>
+          ))}
     </div>
   );
 }
