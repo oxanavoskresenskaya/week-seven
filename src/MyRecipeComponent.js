@@ -1,21 +1,31 @@
 import iconCheck from './icon-check.png';
-function MyRecipeComponent ({label, image, calories, ingredients}) {
+import {
+    BrowserRouter as Router,
+
+    Link
+  } from 'react-router-dom';
+function MyRecipeComponent ({label, imageRecipe, calories, ingredients, link}) {
     return (
     <div>
         <div className='container'>
             <h2>{label}</h2>
         </div>
         <div className='container'>
-            <img src={image} alt='photo'/>
+            <img src={imageRecipe} alt='foto' className='foto'/>
         </div>
         <div className='container'>
-            <p>{Math.floor(calories)} calories</p>
+            <p className='par'>{Math.floor(calories)} calories</p>
         </div>
         <ul className='list'>
-            {ingredients.map (ingredient => (
-                <li><img src={iconCheck} alt='icon-check' width='25px'/>{ingredient}</li>
+            {ingredients.map ((ingredient, id) => (
+                <li key={id}><img src={iconCheck} alt='icon-check' width='25px'/>{ingredient}</li>
             ))}
         </ul>
+        <Router>
+        <nav className='container'>
+            <Link to={link} target="_blank" className='page'>go to recipe page</Link>
+        </nav>
+        </Router>
     </div>
     )
 
